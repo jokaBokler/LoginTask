@@ -31,35 +31,43 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
             "preference_key", Context.MODE_PRIVATE
         )
         val gson = Gson()
-        val loginList: MutableList<UserData>
+        var loginList = mutableListOf<UserData>()
         val editor = sharedPreferences.edit()
-        val json = sharedPreferences.getString("loginPairs", "")
-        val type = object : TypeToken<MutableList<UserData>>() {}.type
-        loginList = gson.fromJson(json, type)
-        loginList.add(UserData(login = username, password = password))
-        val newJson = gson.toJson(loginList)
-        editor.putString("loginPairs", newJson)
-        editor.apply()
-        _registerResult.value = LoginResult(success = LoggedInUserView(displayName = username))
+        try {
+            val json = sharedPreferences.getString("loginPairs", "")
+            val type = object : TypeToken<MutableList<UserData>>() {}.type
+            loginList = gson.fromJson(json, type)
+            loginList.add(UserData(login = username, password = password))
+            val newJson = gson.toJson(loginList)
+            editor.putString("loginPairs", newJson)
+            editor.apply()
+            _registerResult.value = LoginResult(success = LoggedInUserView(displayName = username))
+        } catch (_: Exception) {
+            loginList.add(UserData(login = username, password = password))
+            val newJson = gson.toJson(loginList)
+            editor.putString("loginPairs", newJson)
+            editor.apply()
+            _registerResult.value = LoginResult(success = LoggedInUserView(displayName = username))
+        }
     }
 
     fun loginDataChanged(username: String, password: String) {
         val sharedPreferences = getApplication<Application>().getSharedPreferences(
-            "preference_key", Context.MODE_PRIVATE)
+            "preference_key", Context.MODE_PRIVATE
+        )
 
         if (!isUserNameValid(username)) {
             _registerForm.value = LoginFormState(usernameError = R.string.invalid_username)
         } else {
-            if (!isUserNameCharsValid(username)){
+            if (!isUserNameCharsValid(username)) {
                 _registerForm.value = LoginFormState(usernameError = R.string.char_error)
-            }
-            else{
-                if(!isLoginAvailable(sharedPreferences,username)) {
+            } else {
+                if (!isLoginAvailable(sharedPreferences, username)) {
                     _registerForm.value = LoginFormState(usernameError = R.string.login_failed)
-                }
-                else{
+                } else {
                     if (!isPasswordValid(password)) {
-                        _registerForm.value = LoginFormState(passwordError = R.string.invalid_password)
+                        _registerForm.value =
+                            LoginFormState(passwordError = R.string.invalid_password)
                     } else {
                         _registerForm.value = LoginFormState(isDataValid = true)
                     }
@@ -84,7 +92,7 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
                 }
             }
             return true
-        }catch(_:Exception){
+        } catch (_: Exception) {
             return true
         }
     }
