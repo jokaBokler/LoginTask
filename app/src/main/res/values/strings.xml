@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">LoginTask</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"The user with this login already exists"</string>
+    <string name="char_error">Special Characters aren\'t available except - _ \' . @</string>
+    <string name="you_are_logged_in">You are logged in</string>
+    <string name="user_does_not_exist">This user does not exist</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="login_activity">Login Activity</string>
+    <string name="register_activity">Register Activity</string>
+</resources>
